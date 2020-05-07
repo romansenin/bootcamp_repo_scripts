@@ -9,7 +9,7 @@ function reFormatNum() {
 }
 
 if [[ "$#" -ne 3 ]]; then
-  echo "Usage: ./algorithmsToStudents.sh [Week Number] [Start Algorithm] [End Algorithm]"
+  echo "Usage: ./solutionsToAlgorithms.sh [Week Number] [Start Algorithm] [End Algorithm]"
 else
   pathToContent="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/December/fullstack-ground/01-Class-Content"
   pathToStudentRepo="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/December/UCD-SAC-FSF-PT-12-2019-U-C"
