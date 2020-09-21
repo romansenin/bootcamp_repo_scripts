@@ -11,8 +11,8 @@ function reFormatNum() {
 if [[ "$#" -ne 3 ]]; then
   echo "Usage: ./solutionsToActivities.sh [Week Number] [Start Activity] [End Activity]"
 else
-  pathToContent="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/December/fullstack-ground/01-Class-Content"
-  pathToStudentRepo="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/December/UCD-SAC-FSF-PT-12-2019-U-C"
+  pathToContent="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/fullstack-ground/01-Class-Content"
+  pathToStudentRepo="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/September20/ucd-sac-fsf-pt-09-2020-u-c"
 
   weekNum=$(reFormatNum $1)
 
