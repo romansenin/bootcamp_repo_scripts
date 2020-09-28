@@ -16,9 +16,6 @@ else
 
   weekNum=$(reFormatNum $1)
 
-  # cp -r ${pathToContent}/${weekNum}* ${pathToStudentRepo}
-  # rsync -av --progress ${pathToContent}/${weekNum}* ${pathToStudentRepo} --exclude Solved --exclude Master > /dev/null
-
   newWeekDirName=$(echo ${pathToContent}/${weekNum}* | sed -E 's/^[^0-9].*Content\/([0-9]+.*)/\1/')
 
   mkdir ${pathToStudentRepo}/${newWeekDirName}
@@ -42,5 +39,5 @@ else
     printf '\n\n'
   done
 
-  rsync -av --progress ${pathToContent}/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Master > /dev/null
+  rsync -av --progress ${pathToContent}/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
 fi

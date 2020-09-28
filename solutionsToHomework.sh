@@ -16,10 +16,10 @@ else
 
   weekNum=$(reFormatNum $1)
 
-  if [[ -n "$(ls ${pathToContent}/${weekNum}*/02*/Master 2>/dev/null)" ]]; then
-    cp -r ${pathToContent}/${weekNum}*/02*/Master ${pathToStudentRepo}/${weekNum}*/02*
+  if [[ -n "$(ls ${pathToContent}/${weekNum}*/02*/Main 2>/dev/null)" ]]; then
+    cp -r ${pathToContent}/${weekNum}*/02*/Main ${pathToStudentRepo}/${weekNum}*/02*
 
-    source=$(echo ${pathToContent}/${weekNum}*/02*/Master | sed -E 's/.*01-Class-Content\/(.*)/\1/')
+    source=$(echo ${pathToContent}/${weekNum}*/02*/Main | sed -E 's/.*01-Class-Content\/(.*)/\1/')
     destination=$(echo ${pathToStudentRepo}/${weekNum}*/02* | sed -E 's/^.*(UCD.*)/\1/')
 
     barLength=$((${#source} + ${#destination} + 4))
@@ -32,7 +32,7 @@ else
     printf '\n\n'
   else
     week=$(echo ${pathToContent}/${weekNum}*/02* | sed -E 's/.*01-Class-Content\/(.*)/\1/')
-    tail="/Master Not Found"
+    tail="/Main Not Found"
     barLength=$((${#week} + ${#tail}))
 
     printf '%.0s-' $(seq 1 $barLength)
