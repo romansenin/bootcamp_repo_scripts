@@ -21,11 +21,11 @@ else
   for num in $(seq $2 $3); do
     activityNum=$(reFormatNum $num)
 
-    if [[ -n "$(ls ${pathToContent}/${weekNum}*/01*/${activityNum}*/Solved 2>/dev/null)" ]]; then
-      cp -r ${pathToContent}/${weekNum}*/01*/${activityNum}*/Solved ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}*
-      pathToSolved=$(cd ${pathToContent}/${weekNum}*/01*/${activityNum}*/Solved; pwd)
+    if [[ -n "$(ls ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved 2>/dev/null)" ]]; then
+      cp -r ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}*
+      pathToSolved=$(cd ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved; pwd)
 
-      source=$(echo ${pathToContent}/${weekNum}*/01*/${activityNum}*/Solved | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
+      source=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
       destination=$(echo ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}* | sed -E 's/^.*(UCD.*)/\1/')
 
       barLength=$((${#source} + ${#destination} + 4))
@@ -37,7 +37,7 @@ else
       printf '%.0s-' $(seq 1 $barLength)
       printf '\n\n'
     else
-      activity=$(echo ${pathToContent}/${weekNum}*/01*/${activityNum}* | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
+      activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
       tail="/Solved Not Found"
       barLength=$((${#activity} + ${#tail}))
 

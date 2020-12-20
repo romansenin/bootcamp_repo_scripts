@@ -21,11 +21,11 @@ else
   for num in $(seq $2 $3); do
     algorithmNum=$(reFormatNum $num)
 
-    if [[ -n "$(ls ${pathToContent}/${weekNum}*/03*/${algorithmNum}*/Solved 2>/dev/null)" ]]; then
-      cp -r ${pathToContent}/${weekNum}*/03*/${algorithmNum}*/Solved ${pathToStudentRepo}/${weekNum}*/03*/${algorithmNum}*
-      pathToSolved=$(cd ${pathToContent}/${weekNum}*/03*/${algorithmNum}*/Solved; pwd)
+    if [[ -n "$(ls ${pathToContent}/01*/${weekNum}*/03*/${algorithmNum}*/Solved 2>/dev/null)" ]]; then
+      cp -r ${pathToContent}/01*/${weekNum}*/03*/${algorithmNum}*/Solved ${pathToStudentRepo}/${weekNum}*/03*/${algorithmNum}*
+      pathToSolved=$(cd ${pathToContent}/01*/${weekNum}*/03*/${algorithmNum}*/Solved; pwd)
 
-      source=$(echo ${pathToContent}/${weekNum}*/03*/${algorithmNum}*/Solved | sed -E 's/.*Algorithms\/([0-9]+.*)/\1/')
+      source=$(echo ${pathToContent}/01*/${weekNum}*/03*/${algorithmNum}*/Solved | sed -E 's/.*Algorithms\/([0-9]+.*)/\1/')
       destination=$(echo ${pathToStudentRepo}/${weekNum}*/03*/${algorithmNum}* | sed -E 's/^.*(UCD.*)/\1/')
 
       barLength=$((${#source} + ${#destination} + 4))
@@ -37,7 +37,7 @@ else
       printf '%.0s-' $(seq 1 $barLength)
       printf '\n\n'
     else
-      algorithm=$(echo ${pathToContent}/${weekNum}*/03*/${algorithmNum}* | sed -E 's/.*Algorithms\/([0-9]+.*)/\1/')
+      algorithm=$(echo ${pathToContent}/01*/${weekNum}*/03*/${algorithmNum}* | sed -E 's/.*Algorithms\/([0-9]+.*)/\1/')
       tail="/Solved Not Found"
       barLength=$((${#algorithm} + ${#tail}))
 

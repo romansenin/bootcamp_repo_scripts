@@ -18,7 +18,7 @@ else
 
   weekNum=$(reFormatNum $1)
 
-  newWeekDirName=$(echo ${pathToContent}/${weekNum}* | sed -E 's/^[^0-9].*Content\/([0-9]+.*)/\1/')
+  newWeekDirName=$(echo ${pathToContent}/01*/${weekNum}* | sed -E 's/^[^0-9].*Content\/([0-9]+.*)/\1/')
 
   mkdir ${pathToStudentRepo}/${newWeekDirName}
   mkdir ${pathToStudentRepo}/${newWeekDirName}/01-Activities
@@ -26,9 +26,9 @@ else
   for num in $(seq $2 $3); do
     activityNum=$(reFormatNum $num)
 
-    rsync -av --progress ${pathToContent}/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
+    rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
 
-    activity=$(echo ${pathToContent}/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
+    activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
     destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
 
     barLength=$((${#activity} + ${#destination} + 4))
@@ -41,5 +41,5 @@ else
     printf '\n\n'
   done
 
-  rsync -av --progress ${pathToContent}/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
+  rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
 fi
