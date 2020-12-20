@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 function reFormatNum() {
   argLength=${#1}
 
@@ -11,8 +12,9 @@ function reFormatNum() {
 if [[ "$#" -ne 3 ]]; then
   echo "Usage: ./newActivities.sh [Week Number] [Start Activity] [End Activity]"
 else
-  pathToContent="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/fullstack-ground/01-Class-Content"
-  pathToStudentRepo="/Users/rasenin/Desktop/ucd-boot-camp/gitlab/September20/ucd-sac-fsf-pt-09-2020-u-c"
+  # load path vars $pathtoContent and $pathToStudentRepo
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  source "${DIR}/.env"
 
   weekNum=$(reFormatNum $1)
 
