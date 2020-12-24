@@ -80,7 +80,7 @@ else
   # commit if SHOULD_COMMIT
   if [[ $SHOULD_COMMIT -eq 1 ]]; then
     git add ${weekNum}*/02*
-    git commit -m "homework solution"
+    git commit -m "homework $1 solution"
   fi
 
   #  push if SHOULD_PUSH
