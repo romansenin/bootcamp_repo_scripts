@@ -90,7 +90,7 @@ else
 
   # commit if SHOULD_COMMIT
   if [[ $SHOULD_COMMIT -eq 1 ]]; then 
-    git commit -m "algorithm solutions"
+    git commit -m "week $1 algorithm $2-$3 solutions"
   fi
   
   #  push if SHOULD_PUSH
