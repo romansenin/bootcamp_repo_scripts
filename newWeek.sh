@@ -39,8 +39,8 @@ if [[ $1 == "-p" ]] || [[ $1 == "--push" ]]; then
   shift
 fi
 
-if [[ "$#" -ne 3 ]]; then
-  echo "Usage: ./newWeek.sh [options] [Week Number] [Start Activity] [End Activity]. Type -h or --help for more information."
+if [[ "$#" -lt 1 ]]; then
+  echo "Usage: ./newWeek.sh [options] [Week Number] (Start Activity) (End Activity). Type -h or --help for more information."
 else
   # load path vars $pathtoContent and $pathToStudentRepo
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -59,32 +59,60 @@ else
   newWeekDirName=$(echo ${pathToContent}/01*/${weekNum}* | sed -E 's/^[^0-9].*Content\/([0-9]+.*)/\1/')
 
   mkdir ${pathToStudentRepo}/${newWeekDirName}
-  mkdir ${pathToStudentRepo}/${newWeekDirName}/01-Activities
+  
+  # if specified acitvity/-ies
+  if [[ "$#" -gt 1 ]]; then
+    mkdir ${pathToStudentRepo}/${newWeekDirName}/01-Activities
 
-  for num in $(seq $2 $3); do
-    activityNum=$(reFormatNum $num)
+    if [[ "$#" -eq 2 ]]; then
+      activityNum=$(reFormatNum $2)
 
-    rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
+      rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
 
-    activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
-    destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
+      activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
+      destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
 
-    barLength=$((${#activity} + ${#destination} + 4))
+      barLength=$((${#activity} + ${#destination} + 4))
 
-    printf '%.0s-' $(seq 1 $barLength)
-    printf '\n'
-    printf "$activity -> $destination"
-    printf '\n'
-    printf '%.0s-' $(seq 1 $barLength)
-    printf '\n\n'
-  done
+      printf '%.0s-' $(seq 1 $barLength)
+      printf '\n'
+      printf "$activity -> $destination"
+      printf '\n'
+      printf '%.0s-' $(seq 1 $barLength)
+      printf '\n\n'
+    else
+      for num in $(seq $2 $3); do
+        activityNum=$(reFormatNum $num)
+
+        rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
+
+        activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
+        destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
+
+        barLength=$((${#activity} + ${#destination} + 4))
+
+        printf '%.0s-' $(seq 1 $barLength)
+        printf '\n'
+        printf "$activity -> $destination"
+        printf '\n'
+        printf '%.0s-' $(seq 1 $barLength)
+        printf '\n\n'
+      done
+    fi
+  fi  
 
   rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
 
   # commit if SHOULD_COMMIT
   if [[ $SHOULD_COMMIT -eq 1 ]]; then
     git add $1*
-    git commit -m "week $1, activities $2-$3"
+    if [[ "$#" -eq 1 ]]; then
+      git commit -m "week $1" 
+    elif [[ "$#" -eq 2 ]]; then
+      git commit -m "week $1, activity $2" 
+    else
+      git commit -m "week $1, activities $2-$3"
+    fi
   fi
 
   #  push if SHOULD_PUSH
