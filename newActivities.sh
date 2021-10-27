@@ -48,8 +48,10 @@ else
     
     # clean and pull latest content from source
     cd $pathToContent
+    printf 'Cleaning source repository...\n'
     git checkout .
     git clean -fd
+    printf '\nPulling latest changes...\n'
     git pull
     
     cd $pathToStudentRepo
@@ -71,12 +73,13 @@ else
         
         barLength=$((${#activity} + ${#destination} + 4))
         
+        printf '\n'
         printf '%.0s-' $(seq 1 $barLength)
         printf '\n'
         printf "$activity -> $destination"
         printf '\n'
         printf '%.0s-' $(seq 1 $barLength)
-        printf '\n\n'
+        printf '\n'
     done
     
     # commit if SHOULD_COMMIT

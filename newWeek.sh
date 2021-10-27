@@ -48,8 +48,10 @@ else
     
     # clean and pull latest content from source
     cd $pathToContent
+    printf 'Cleaning source repository...\n'
     git checkout .
     git clean -fd
+    printf '\nPulling latest changes...\n'
     git pull
     
     cd $pathToStudentRepo
@@ -74,12 +76,13 @@ else
             
             barLength=$((${#activity} + ${#destination} + 4))
             
+            printf '\n'
             printf '%.0s-' $(seq 1 $barLength)
             printf '\n'
             printf "$activity -> $destination"
             printf '\n'
             printf '%.0s-' $(seq 1 $barLength)
-            printf '\n\n'
+            printf '\n'
         else
             for num in $(seq $2 $3); do
                 activityNum=$(reFormatNum $num)
@@ -91,18 +94,23 @@ else
                 
                 barLength=$((${#activity} + ${#destination} + 4))
                 
+                printf '\n'
                 printf '%.0s-' $(seq 1 $barLength)
                 printf '\n'
                 printf "$activity -> $destination"
                 printf '\n'
                 printf '%.0s-' $(seq 1 $barLength)
-                printf '\n\n'
+                printf '\n'
             done
         fi
         cp -r ${pathToContent}/01*/${weekNum}*/01*/Git-Guide ${pathToStudentRepo}/${weekNum}*/01*
     fi
     
     rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
+    
+    printf '\n'
+    printf "$newWeekDirName -> $pathToStudentRepo"
+    printf '\n'
     
     # commit if SHOULD_COMMIT
     if [[ $SHOULD_COMMIT -eq 1 ]]; then
