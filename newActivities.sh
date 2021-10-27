@@ -58,6 +58,24 @@ else
     
     weekNum=$(reFormatNum $1)
     
+    if [ ! -d $(echo ${pathToStudentRepo}/${weekNum}*) ] ; then
+        printf "\nFatal: $pathToStudentRepo doesn't have a week $weekNum directory.\n"
+        printf "Please use the newWeek script to create a folder for that week.\n"
+        exit
+    fi
+    
+    weekDirName=$(echo ${pathToContent}/01*/${weekNum}* | sed -E 's/^[^0-9].*Content\/([0-9]+.*)/\1/')
+    
+    if [ ! -d $(echo ${pathToStudentRepo}/${weekNum}*/01-Activities) ] ; then
+        printf "\n$(echo ${pathToStudentRepo}/${weekNum}*)/01-Activities isn't a directory.\n"
+        
+        read -p "Would you like to make it? " yn
+        case $yn in
+            "Yes"|"Y"|"yes"|"y" ) mkdir ${pathToStudentRepo}/${weekDirName}/01-Activities; ;;
+            * ) printf "Exiting script...\n" && exit;;
+        esac
+    fi
+    
     for num in $(seq $2 $3); do
         activityNum=$(reFormatNum $num)
         
