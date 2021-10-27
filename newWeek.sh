@@ -9,15 +9,28 @@ function reFormatNum() {
     fi
 }
 
+# $1 - barLength
+# $2 - filename
+# $3 - destination path
+function logCopy() {
+    printf '\n'
+    printf '%.0s-' $(seq 1 $1)
+    printf '\n'
+    printf "$2 -> $3"
+    printf '\n'
+    printf '%.0s-' $(seq 1 $1)
+    printf '\n'
+}
+
 # Display help messages if help flag passed
 if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
     echo "[Week Number]         week number for the desired new week materials"
-    echo "[Start Activity]      starting activity to copy"
-    echo "[End Activity]        ending activity to copy (inclusive)"
+    echo "(Start Activity)      optional starting activity to copy"
+    echo "(End Activity)        optional ending activity to copy (inclusive)"
     echo "options:"
     echo "-h, --help            show brief help"
     echo "-c, --commit          commit the changes but do not push"
-    echo "-p, --push            push new week and activities to dest origin"
+    echo "-p, --push            push new week and materials to destination origin"
     exit 0
 fi
 
@@ -66,23 +79,18 @@ else
     if [[ "$#" -gt 1 ]]; then
         mkdir ${pathToStudentRepo}/${newWeekDirName}/01-Activities
         
+        destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD|ucd.*)/\1/')
+        
         if [[ "$#" -eq 2 ]]; then
             activityNum=$(reFormatNum $2)
             
             rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
             
             activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
-            destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
             
             barLength=$((${#activity} + ${#destination} + 4))
             
-            printf '\n'
-            printf '%.0s-' $(seq 1 $barLength)
-            printf '\n'
-            printf "$activity -> $destination"
-            printf '\n'
-            printf '%.0s-' $(seq 1 $barLength)
-            printf '\n'
+            logCopy $barLength $activity $destination
         else
             for num in $(seq $2 $3); do
                 activityNum=$(reFormatNum $num)
@@ -90,27 +98,32 @@ else
                 rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
                 
                 activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/^[^0-9].*Activities\/([0-9]+.*)/\1/')
-                destination=$(echo ${pathToStudentRepo}/${weekNum}*/01* | sed -E 's/^.*(UCD.*)/\1/')
                 
                 barLength=$((${#activity} + ${#destination} + 4))
                 
-                printf '\n'
-                printf '%.0s-' $(seq 1 $barLength)
-                printf '\n'
-                printf "$activity -> $destination"
-                printf '\n'
-                printf '%.0s-' $(seq 1 $barLength)
-                printf '\n'
+                logCopy $barLength $activity $destination
             done
         fi
-        cp -r ${pathToContent}/01*/${weekNum}*/01*/Git-Guide ${pathToStudentRepo}/${weekNum}*/01*
+        
+        # copy any non-numeric files/folders from 01-Activities as well
+        for file in `ls ${pathToContent}/01*/${weekNum}*/01*`; do
+            if [[ $file =~ ^[^0-9] ]]; then
+                cp -r ${pathToContent}/01*/${weekNum}*/01*/${file} ${pathToStudentRepo}/${weekNum}*/01*
+                
+                barLength=$((${#file} + ${#destination} + 4))
+                
+                logCopy $barLength $file $destination
+            fi
+        done
     fi
     
     rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
     
-    printf '\n'
-    printf "$newWeekDirName -> $pathToStudentRepo"
-    printf '\n'
+    destination=$(echo ${pathToStudentRepo} | sed -E 's/^.*(UCD|ucd.*)/\1/')
+    
+    barLength=$((${#newWeekDirName} + ${#destination} + 4))
+    
+    logCopy $barLength $newWeekDirName $destination
     
     # commit if SHOULD_COMMIT
     if [[ $SHOULD_COMMIT -eq 1 ]]; then
