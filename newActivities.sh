@@ -49,8 +49,8 @@ else
     # clean and pull latest content from source
     cd $pathToContent
     printf 'Cleaning source repository...\n'
-    git checkout .
-    git clean -fd
+    git checkout -q .
+    git clean -fdq
     printf '\nPulling latest changes...\n'
     git pull
     

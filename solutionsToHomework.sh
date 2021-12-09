@@ -50,7 +50,7 @@ else
     
     if [[ -n "$(ls ${pathToContent}/01*/${weekNum}*/02*/Main 2>/dev/null)" ]]; then
         # undo any changes in homework prior to copy
-        git checkout ${weekNum}*/02*
+        git checkout -q ${weekNum}*/02*
         
         cp -r ${pathToContent}/01*/${weekNum}*/02*/Main ${pathToStudentRepo}/${weekNum}*/02*
         
