@@ -79,7 +79,7 @@ else
     for num in $(seq $2 $3); do
         activityNum=$(reFormatNum $num)
         
-        rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved > /dev/null
+        rsync -av --progress ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* ${pathToStudentRepo}/${weekNum}*/01* --exclude Solved --exclude Main > /dev/null
         
         # add activity to source control
         if [[ $SHOULD_COMMIT -eq 1 ]] ; then

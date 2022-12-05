@@ -55,7 +55,7 @@ else
         
         if [[ -n "$(ls ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved 2>/dev/null)" ]]; then
             # undo any changes in activity prior to copy
-            git checkout -q ${weekNum}*/01*/${activityNum}*
+            git checkout -q ${weekNum}*/01*/${activityNum}* &> /dev/null
             cd $pathToContent
             git checkout -q ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved
             cd $pathToStudentRepo
@@ -68,6 +68,31 @@ else
             fi
             
             source=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Solved | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
+            destination=$(echo ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}* | sed -E 's/^.*(UCD.*)/\1/')
+            
+            barLength=$((${#source} + ${#destination} + 4))
+            
+            printf '%.0s-' $(seq 1 $barLength)
+            printf '\n'
+            printf "$source -> $destination"
+            printf '\n'
+            printf '%.0s-' $(seq 1 $barLength)
+            printf '\n\n'
+        elif [[ -n "$(ls ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Main 2>/dev/null)" ]]; then
+            # undo any changes in activity prior to copy
+            git checkout -q ${weekNum}*/01*/${activityNum}* &> /dev/null
+            cd $pathToContent
+            git checkout -q ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Main
+            cd $pathToStudentRepo
+            
+            cp -r ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Main ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}*
+            
+            # git add activity
+            if [[ $SHOULD_COMMIT -eq 1 ]] ; then
+                git add ${weekNum}*/01*/${activityNum}*
+            fi
+            
+            source=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}*/Main | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
             destination=$(echo ${pathToStudentRepo}/${weekNum}*/01*/${activityNum}* | sed -E 's/^.*(UCD.*)/\1/')
             
             barLength=$((${#source} + ${#destination} + 4))
