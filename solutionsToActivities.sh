@@ -105,12 +105,15 @@ else
             printf '\n\n'
         else
             activity=$(echo ${pathToContent}/01*/${weekNum}*/01*/${activityNum}* | sed -E 's/.*Activities\/([0-9]+.*)/\1/')
-            tail="/Solved Not Found"
-            barLength=$((${#activity} + ${#tail}))
+            tail="/Solved"
+            tail2="/Main"
+            concat=" or "
+            suffix=" Not Found"
+            barLength=$((${#activity} + ${#tail} + ${#concat} + ${#activity} + ${#tail2} + ${#suffix}))
             
             printf '%.0s-' $(seq 1 $barLength)
             printf '\n'
-            echo "${activity}${tail}"
+            echo "${activity}${tail}${concat}${activity}${tail2}${suffix}"
             printf '%.0s-' $(seq 1 $barLength)
             printf '\n\n'
         fi
