@@ -117,7 +117,9 @@ else
         done
     fi
     
-    rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude Solved --exclude Main > /dev/null
+    rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude 03-Algorithms --exclude Solved --exclude Main > /dev/null
+
+    rsync -av --progress ${pathToContent}/01*/${weekNum}* ${pathToStudentRepo} --exclude 01-Activities --exclude 02-Challenge > /dev/null
     
     destination=$(echo ${pathToStudentRepo} | sed -E 's/^.*(UCD|ucd.*)/\1/')
     
